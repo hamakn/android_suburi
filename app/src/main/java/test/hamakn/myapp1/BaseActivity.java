@@ -1,6 +1,8 @@
 package test.hamakn.myapp1;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.os.Bundle;
@@ -15,6 +17,10 @@ public class BaseActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         log("onCreate");
+
+        SharedPreferences prefs = getSharedPreferences("BaseActivity", Context.MODE_PRIVATE);
+        int pauseCount = prefs.getInt("pauseCount", 0);
+        Log.d("tag", "pauseCount: " + pauseCount);
     }
 
     @Override
@@ -77,6 +83,12 @@ public class BaseActivity extends ActionBarActivity {
     protected void onPause() {
         super.onPause();
         log("onPause");
+
+        // http://developer.android.com/reference/android/content/Context.html#getSharedPreferences(java.lang.String, int)
+        SharedPreferences prefs = getSharedPreferences("BaseActivity", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt("pauseCount", prefs.getInt("pauseCount", 0) + 1);
+        editor.apply();
     }
 
     // Stop系
